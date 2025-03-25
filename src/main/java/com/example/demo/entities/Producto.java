@@ -2,7 +2,7 @@ package com.example.demo.entities;
 
 import jakarta.persistence.*;
 
-@Entity // Marca la clase como una entidad JPA
+@Entity
 @Table(name = "producto") // Nombre de la tabla en MySQL
 public class Producto {
 
@@ -15,10 +15,10 @@ public class Producto {
     private Integer cantidad;
     private Integer minimo;
 
-    // Constructor vacío (necesario para JPA)
+
     public Producto() {}
 
-    // Constructor con parámetros
+
     public Producto(Long id, String nombre, String imagen, Integer cantidad, Integer minimo) {
         this.id = id;
         this.nombre = nombre;
@@ -27,7 +27,7 @@ public class Producto {
         this.minimo = minimo;
     }
 
-    // Getters y Setters
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
