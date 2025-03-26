@@ -1,24 +1,35 @@
 package com.example.controlalmacen;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.controlalmacen.entities.Producto;
 import com.example.controlalmacen.instances.ProductoInstance;
-import com.example.controlalmacen.instances.UserInstance;
 import com.example.controlalmacen.repositories.ProductosInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductActivity extends AppCompatActivity {
 
     private ProductosInterface productosInterface;
     private RecyclerView recyclerView;
+    private ProductoAdapter adapter;
+    private List<Producto> productos = new ArrayList<>(); // Inicializar para evitar NullPointerException
+
+
+    private EditText searchProduct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +43,26 @@ public class ProductActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewProductos);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Cargar los productos al abrir la actividad
+        // Inicializar EditText de búsqueda
+        searchProduct = findViewById(R.id.search_product);
+        searchProduct.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filtrarProductos(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+
+        // Cargar productos al abrir la actividad
         fetchProductos();
     }
+
 
     private void fetchProductos() {
         Call<List<Producto>> call = productosInterface.getAllProductos();
@@ -43,11 +71,11 @@ public class ProductActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Producto>> call, Response<List<Producto>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Producto> productos = response.body();
+                    productos = response.body();
                     Log.d("ProductActivity", "Productos obtenidos: " + productos.size());
 
                     // Adaptador con los datos de los productos
-                    ProductoAdapter adapter = new ProductoAdapter(productos);
+                    adapter = new ProductoAdapter(productos);
                     recyclerView.setAdapter(adapter);
                 } else {
                     Log.e("ProductActivity", "Error en la respuesta: " + response.code());
@@ -61,5 +89,17 @@ public class ProductActivity extends AppCompatActivity {
                 Toast.makeText(ProductActivity.this, "Algo salió mal... Inténtalo nuevamente.", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+    }
+
+    private void filtrarProductos(String texto) {
+        List<Producto> productosFiltrados = new ArrayList<>();
+        for (Producto p : productos) {
+            if (p.getNombre().toLowerCase().contains(texto.toLowerCase())) {
+                productosFiltrados.add(p);
+            }
+        }
+        adapter.actualizarLista(productosFiltrados);
     }
 }
