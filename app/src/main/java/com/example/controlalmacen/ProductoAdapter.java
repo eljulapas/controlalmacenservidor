@@ -41,9 +41,22 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
         holder.cantidadTextView.setText("Cantidad: " + producto.getCantidad());
         holder.minimoTextView.setText("Mínimo: " + producto.getMinimo());
 
+        // Ocultar mensaje de alerta por defecto
+        holder.alertaTextView.setVisibility(View.GONE);
+
         // Si el producto no tiene imagen, usa la predeterminada
         if (producto.getImagen() == null || producto.getImagen().isEmpty()) {
             holder.imagenImageView.setImageResource(R.drawable.diet);
+        }
+
+        // Verificar si la cantidad está en el límite mínimo
+        if (producto.getCantidad() <= producto.getMinimo()) {
+            holder.imagenImageView.setImageResource(R.drawable.outofstock);
+            holder.alertaTextView.setText("⚠ ¡Stock bajo!");  // Mensaje de alerta
+            holder.alertaTextView.setVisibility(View.VISIBLE);
+        } else {
+            holder.imagenImageView.setImageResource(R.drawable.diet);
+            holder.alertaTextView.setVisibility(View.GONE);
         }
 
         // Botón para sumar cantidad
@@ -52,6 +65,11 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
             producto.setCantidad(nuevaCantidad);
             holder.cantidadTextView.setText("Cantidad: " + nuevaCantidad);
             actualizarCantidad(producto.getId(), nuevaCantidad, holder);
+            // Mostrar mensaje si el stock está bajo
+            if (nuevaCantidad <= producto.getMinimo()) {
+                Toast.makeText(holder.itemView.getContext(), "⚠ ¡Atención! El stock de " + producto.getNombre() + " está bajo.", Toast.LENGTH_SHORT).show();
+            }
+
         });
 
         // Botón para restar cantidad
@@ -61,6 +79,11 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
                 producto.setCantidad(nuevaCantidad);
                 holder.cantidadTextView.setText("Cantidad: " + nuevaCantidad);
                 actualizarCantidad(producto.getId(), nuevaCantidad, holder);
+
+                // Mostrar mensaje si el stock está bajo
+                if (nuevaCantidad <= producto.getMinimo()) {
+                    Toast.makeText(holder.itemView.getContext(), "⚠ ¡Atención! El stock de " + producto.getNombre() + " está bajo.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -79,7 +102,7 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
 
     // Clase ViewHolder
     public static class ProductoViewHolder extends RecyclerView.ViewHolder {
-        TextView nombreTextView, cantidadTextView, minimoTextView;
+        TextView nombreTextView, cantidadTextView, minimoTextView, alertaTextView;
         ImageView imagenImageView;
         Button btnSumar, btnRestar;
 
@@ -89,6 +112,7 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
             imagenImageView = itemView.findViewById(R.id.producto_imagen);
             cantidadTextView = itemView.findViewById(R.id.producto_cantidad);
             minimoTextView = itemView.findViewById(R.id.producto_minimo);
+            alertaTextView = itemView.findViewById(R.id.producto_alerta);
             btnSumar = itemView.findViewById(R.id.btnSumar);
             btnRestar = itemView.findViewById(R.id.btnRestar);
         }
