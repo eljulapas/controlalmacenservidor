@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">controlAlmacen</string>
+    <string name="openDrawer">Abrir menú lateral</string>
+    <string name="closeDrawer">Cerrar menú lateral</string>
+
+
+
+    <string name="navigation_drawer_open">Abrir menú</string>
+    <string name="navigation_drawer_close">Cerrar menú</string>
+
 </resources>

@@ -19,5 +19,10 @@ public interface ProductosInterface {
     @GET("productos/nombre/{nombre}") //Mirar si hay algún nombre repetido en la base de datos
     Call<Boolean> productoExiste(@Path("nombre") String nombre);
 
+    @PUT("productos/{id}") // Modificar todos los datos de un producto
+    Call<Producto> updateProducto(@Path("id") Long id, @Body Producto producto);
+
+    @DELETE("productos/{id}") // Eliminar un producto por su id
+    Call<Void> deleteProducto(@Path("id") Long id);
 
 }

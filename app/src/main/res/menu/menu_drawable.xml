@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Sección libre -->
+    <group android:id="@+id/group_libre">
+        <item
+                android:id="@+id/menu_edit_product"
+                android:title="Editar producto"
+                android:icon="@drawable/minus"/>
+        <item
+                android:id="@+id/menu_disable_product"
+                android:title="Deshabilitar producto"
+                android:icon="@drawable/minus"/>
+        <item
+                android:id="@+id/menu_delete_product"
+                android:title="Eliminar producto"
+                android:icon="@drawable/minus"/>
+    </group>
+
+    <!-- Sección privada -->
+    <group android:id="@+id/group_privada">
+        <item
+                android:id="@+id/menu_admin_option"
+                android:title="Opción solo admin"
+                android:icon="@drawable/minus"/>
+    </group>
+
+
+
+    <item
+            android:id="@+id/nav_editar_producto"
+            android:icon="@drawable/minus"
+            android:title="Editar Producto" />
+
+</menu>

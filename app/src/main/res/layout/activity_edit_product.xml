@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/edit"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:background="#69F0AE">
+
+    <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFF59D"
+                android:padding="16dp"
+                android:layout_margin="32dp">
+
+            <ImageView
+                    android:id="@+id/image_producto"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@android:color/darker_gray"
+                    android:contentDescription="Foto producto"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <Button
+                    android:id="@+id/btn_editar_foto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Editar foto"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <CheckBox
+                    android:id="@+id/checkbox_habilitado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Habilitado"
+                    app:layout_constraintTop_toBottomOf="@id/btn_editar_foto"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="16dp"/>
+
+            <EditText
+                    android:id="@+id/et_nombre"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Nombre"
+                    app:layout_constraintTop_toBottomOf="@id/image_producto"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="16dp"/>
+
+            <EditText
+                    android:id="@+id/et_cantidad"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Cantidad"
+                    android:inputType="number"
+                    app:layout_constraintTop_toBottomOf="@id/et_nombre"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp"/>
+
+            <EditText
+                    android:id="@+id/et_cantidad_minima"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Cantidad mínima"
+                    android:inputType="number"
+                    app:layout_constraintTop_toBottomOf="@id/et_cantidad"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp"/>
+
+            <Button
+                    android:id="@+id/btn_eliminar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Eliminar"
+                    android:backgroundTint="@android:color/holo_red_light"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintTop_toBottomOf="@id/et_cantidad_minima"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="24dp"/>
+
+            <Button
+                    android:id="@+id/btn_actualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Actualizar"
+                    android:backgroundTint="@android:color/holo_green_dark"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintTop_toBottomOf="@id/btn_eliminar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="16dp"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

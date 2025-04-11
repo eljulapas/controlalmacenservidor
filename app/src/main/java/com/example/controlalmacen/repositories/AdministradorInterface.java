@@ -1,0 +1,11 @@
+package com.example.controlalmacen.repositories;
+
+import com.example.controlalmacen.entities.Administrador;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.http.GET;
+
+public interface AdministradorInterface {
+    @GET("administradores")
+    Call<List<Administrador>> getAllAdministradores();
+}

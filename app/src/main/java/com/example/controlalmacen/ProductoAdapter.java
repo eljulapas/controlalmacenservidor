@@ -1,5 +1,6 @@
 package com.example.controlalmacen;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,22 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
             holder.imagenImageView.setImageResource(R.drawable.diet);
             holder.alertaTextView.setVisibility(View.GONE);
         }
+
+        // Agregar un listener para abrir EditActivity al hacer clic en el producto
+        holder.itemView.setOnClickListener(v -> {
+            // Crear el Intent para abrir EditActivity
+            Intent intent = new Intent(holder.itemView.getContext(), EditActivity.class);
+
+            // Pasar los detalles del producto a la siguiente actividad
+            intent.putExtra("PRODUCTO_ID", producto.getId());
+            intent.putExtra("PRODUCTO_NOMBRE", producto.getNombre());
+            intent.putExtra("PRODUCTO_CANTIDAD", producto.getCantidad());
+            intent.putExtra("PRODUCTO_MINIMO", producto.getMinimo());
+            intent.putExtra("PRODUCTO_IMAGEN_URL", producto.getImagen());
+
+            // Iniciar la actividad
+            holder.itemView.getContext().startActivity(intent);
+        });
 
         // Botón para sumar cantidad
         holder.btnSumar.setOnClickListener(v -> {

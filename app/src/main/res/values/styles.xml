@@ -1,0 +1,12 @@
+<resources>
+    <!-- Tema sin ActionBar para usar con Toolbar -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- Puedes usar este estilo para la actividad ProductActivity -->
+    <style name="ProductActivityTheme" parent="AppTheme">
+        <!-- Aquí puedes agregar personalizaciones si lo deseas -->
+    </style>
+</resources>
