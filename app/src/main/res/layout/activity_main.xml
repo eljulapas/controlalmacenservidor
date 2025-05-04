@@ -27,5 +27,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+    <!-- Botón para acceder a albaranes -->
+    <Button
+            android:id="@+id/btnAlbaranes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gestionar Albaranes"
+            android:layout_margin="16dp"
+            app:layout_constraintBottom_toTopOf="@id/btnAgregarProducto"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+    <!-- Botón para acceder al informe de albaranes -->
+    <Button
+            android:id="@+id/btnInformeAlbaranes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Generar Informe Albaranes"
+            android:layout_margin="16dp"
+            app:layout_constraintBottom_toTopOf="@id/btnAlbaranes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.example.controlalmacen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private UserInterface userInterface;
     private RecyclerView recyclerView;
-    private Button btnAgregarProducto;
+    private Button btnAgregarProducto, btnInformeAlbaranes;
     private ProductosInterface productosInterface;
 
     @Override
@@ -41,95 +42,33 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewUsuarios);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Botón para agregar producto
-        btnAgregarProducto = findViewById(R.id.btnAgregarProducto);
-        btnAgregarProducto.setOnClickListener(v -> mostrarDialogoAgregarProducto());
+
+
+        Button btnAlbaranes = findViewById(R.id.btnAlbaranes);
+        btnAlbaranes.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AgregarAlbaranActivity.class);
+            startActivity(intent);
+        });
+
+        // Botón para ir a Informe Albaranes
+        Button btnInformeAlbaranes = findViewById(R.id.btnInformeAlbaranes);
+        btnInformeAlbaranes.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, InformeAlbaranesActivity.class);
+            startActivity(intent);
+        });
+
+        Button btnAgregarNuevoProducto = findViewById(R.id.btnAgregarProducto);
+        btnAgregarNuevoProducto.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AgregarProductoActivity.class);
+            startActivity(intent);
+        });
+
+
 
         productosInterface = ProductoInstance.getRetrofitInstance().create(ProductosInterface.class);
 
         // Cargar los usuarios al abrir la app
         fetchUsers();
-    }
-
-    private void mostrarDialogoAgregarProducto() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_agregar_producto, null);
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-
-        EditText editNombre = dialogView.findViewById(R.id.editNombre);
-        EditText editCantidad = dialogView.findViewById(R.id.editCantidad);
-        EditText editMinimo = dialogView.findViewById(R.id.editMinimo);
-        EditText editImagenUrl = dialogView.findViewById(R.id.editImagenUrl); // Nuevo campo para la URL de la imagen
-        Button btnGuardar = dialogView.findViewById(R.id.btnGuardar);
-
-        btnGuardar.setOnClickListener(v -> {
-            String nombre = editNombre.getText().toString().trim();
-            String cantidadStr = editCantidad.getText().toString().trim();
-            String minimoStr = editMinimo.getText().toString().trim();
-            String imagenUrl = editImagenUrl.getText().toString().trim(); // Tomar el valor de la URL
-
-            if (nombre.isEmpty() || cantidadStr.isEmpty()) {
-                Toast.makeText(MainActivity.this, "Nombre y cantidad son obligatorios", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            int cantidad = Integer.parseInt(cantidadStr);
-            int minimo = minimoStr.isEmpty() ? 0 : Integer.parseInt(minimoStr);
-
-            agregarProducto(nombre, cantidad, minimo, imagenUrl, dialog);
-        });
-
-        dialog.show();
-    }
-
-    private void agregarProducto(String nombre, int cantidad, int minimo, String imagenUrl, AlertDialog dialog) {
-        // Verificar si el producto con el mismo nombre ya existe
-        Call<Boolean> call = productosInterface.productoExiste(nombre);
-        call.enqueue(new Callback<Boolean>() {
-            @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    boolean existeProducto = response.body();
-
-                    if (existeProducto) {
-                        // Mostrar un mensaje indicando que el producto ya existe
-                        Toast.makeText(MainActivity.this, "¡El producto ya existe en la base de datos!", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss(); // Cerrar el diálogo de agregar producto
-                    } else {
-                        // Si no existe, proceder a agregar el nuevo producto
-                        Producto nuevoProducto = new Producto(null, nombre, imagenUrl, cantidad, minimo);
-
-                        // Llamada para agregar el producto
-                        Call<Producto> agregarCall = productosInterface.agregarProducto(nuevoProducto);
-                        agregarCall.enqueue(new Callback<Producto>() {
-                            @Override
-                            public void onResponse(Call<Producto> call, Response<Producto> response) {
-                                if (response.isSuccessful()) {
-                                    Toast.makeText(MainActivity.this, "Producto agregado con éxito", Toast.LENGTH_SHORT).show();
-                                    dialog.dismiss();
-                                } else {
-                                    Toast.makeText(MainActivity.this, "Error al agregar producto", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Producto> call, Throwable t) {
-                                Toast.makeText(MainActivity.this, "Fallo en la conexión", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                } else {
-                    Toast.makeText(MainActivity.this, "Error al verificar existencia del producto", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Fallo en la conexión", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
 

@@ -3,6 +3,12 @@
           xmlns:tools="http://schemas.android.com/tools">
     <!-- Permiso para acceder a Internet -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission
+            android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+            android:maxSdkVersion="28"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
             android:allowBackup="true"
@@ -15,6 +21,17 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.ControlAlmacen"
             tools:targetApi="31">
+
+        <provider
+                android:name="androidx.core.content.FileProvider"
+                android:authorities="com.example.controlalmacen.fileprovider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+            <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/file_paths"/>
+        </provider>
+
         <activity
                 android:name=".MainActivity"
                 android:exported="true">
@@ -27,7 +44,7 @@
         <activity
                 android:name=".ProductActivity"
                 android:exported="true"
-            android:theme="@style/ProductActivityTheme"> <!-- Aplica el tema sin ActionBar -->
+                android:theme="@style/ProductActivityTheme"> <!-- Aplica el tema sin ActionBar -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -36,6 +53,51 @@
         </activity>
         <activity
                 android:name=".EditActivity"
+                android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".AlbaranesProveedorActivity"
+                android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".ProveedorActivity"
+                android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".AgregarAlbaranActivity"
+                android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".InformeAlbaranesActivity"
+                android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".AgregarProductoActivity"
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

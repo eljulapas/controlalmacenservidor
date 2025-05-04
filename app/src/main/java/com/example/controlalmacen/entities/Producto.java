@@ -19,7 +19,7 @@ public class Producto {
     @SerializedName("minimo")
     private Integer minimo;
 
-    // Constructor vacío (necesario para Retrofit)
+
     public Producto() {}
 
     public Producto(Long id, String nombre, String imagen, Integer cantidad, Integer minimo) {

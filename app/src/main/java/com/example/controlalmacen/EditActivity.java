@@ -1,16 +1,21 @@
 package com.example.controlalmacen;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.*;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import com.bumptech.glide.Glide;
 import com.example.controlalmacen.R;
 import com.example.controlalmacen.entities.Producto;
 import com.example.controlalmacen.instances.ProductoInstance;
@@ -25,13 +30,17 @@ public class EditActivity extends AppCompatActivity {
     private EditText etNombre, etCantidad, etCantidadMinima;
     private ImageView imageViewProducto;
     private CheckBox checkBoxHabilitado;
-    private Button btnEliminar;
+    private Button btnEliminar, btnEditarFoto;
 
     private ProductosInterface productosInterface;
 
     private long productoId;
 
     private Button btnActualizar;
+
+
+    // para guardar la imagen seleccionada
+    private String imageUri = "";
 
 
 
@@ -56,6 +65,7 @@ public class EditActivity extends AppCompatActivity {
         checkBoxHabilitado = findViewById(R.id.checkbox_habilitado);
         btnEliminar = findViewById(R.id.btn_eliminar);
         btnActualizar = findViewById(R.id.btn_actualizar);
+        btnEditarFoto = findViewById(R.id.btn_editar_foto);
 
 
 
@@ -64,15 +74,51 @@ public class EditActivity extends AppCompatActivity {
         etCantidad.setText(String.valueOf(cantidad));
         etCantidadMinima.setText(String.valueOf(cantidadMinima));
 
+        // Guardar la url inicial
+        imageUri = imagenUrl != null ? imagenUrl : "";
+
         productosInterface = ProductoInstance.getRetrofitInstance().create(ProductosInterface.class);
+
+
+
+        if (imagenUrl != null && !imagenUrl.isEmpty()) {
+            Glide.with(this)
+                    .load(Uri.parse(imagenUrl))
+                    .placeholder(R.drawable.diet)
+                    .error(R.drawable.diet)
+                    .into(imageViewProducto);
+        } else {
+            Glide.with(this)
+                    .load(R.drawable.diet)
+                    .into(imageViewProducto);
+        }
+
 
 
         btnEliminar.setOnClickListener(v -> eliminarProducto());
 
         btnActualizar.setOnClickListener(v -> actualizarProducto(productoId));
 
+        //Botón para seleccionar foto
+        btnEditarFoto.setOnClickListener(v -> abrirSelectorDeImagen());
 
-        // Glide.with(this).load(imagenUrl).into(imageViewProducto);
+    }
+
+    // Abrir galería
+    private void abrirSelectorDeImagen() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, 100);
+    }
+
+    // Recibir la foto seleccionada
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            Uri selectedImage = data.getData();
+            imageViewProducto.setImageURI(selectedImage);
+            imageUri = selectedImage.toString(); // Actualiza imageUri para guardar luego
+        }
     }
 
     // Menú superior
@@ -143,6 +189,7 @@ public class EditActivity extends AppCompatActivity {
         productoActualizado.setNombre(nombre);
         productoActualizado.setCantidad(cantidad);
         productoActualizado.setMinimo(cantidadMinima);
+        productoActualizado.setImagen(imageUri);
         //productoActualizado.setHabilitado(habilitado);
 
         productosInterface.updateProducto(productoId, productoActualizado).enqueue(new Callback<Producto>() {
@@ -162,7 +209,4 @@ public class EditActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
 }

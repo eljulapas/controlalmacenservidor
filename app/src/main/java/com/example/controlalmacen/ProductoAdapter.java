@@ -1,6 +1,8 @@
 package com.example.controlalmacen;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import com.bumptech.glide.Glide;
+
 
 public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.ProductoViewHolder> {
 
@@ -37,59 +41,59 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
     public void onBindViewHolder(ProductoViewHolder holder, int position) {
         Producto producto = productos.get(position);
 
-        // Establecer los valores iniciales
         holder.nombreTextView.setText(producto.getNombre());
         holder.cantidadTextView.setText("Cantidad: " + producto.getCantidad());
         holder.minimoTextView.setText("Mínimo: " + producto.getMinimo());
 
-        // Ocultar mensaje de alerta por defecto
         holder.alertaTextView.setVisibility(View.GONE);
 
-        // Si el producto no tiene imagen, usa la predeterminada
-        if (producto.getImagen() == null || producto.getImagen().isEmpty()) {
-            holder.imagenImageView.setImageResource(R.drawable.diet);
-        }
+        // Decide qué imagen mostrar
+        String imagenMostrar = producto.getImagen();  // Por defecto, usa la URL
 
-        // Verificar si la cantidad está en el límite mínimo
         if (producto.getCantidad() <= producto.getMinimo()) {
-            holder.imagenImageView.setImageResource(R.drawable.outofstock);
-            holder.alertaTextView.setText("⚠ ¡Stock bajo!");  // Mensaje de alerta
+            // Alerta para si el stock está bajo
+            holder.alertaTextView.setText("⚠ ¡Stock bajo!");
             holder.alertaTextView.setVisibility(View.VISIBLE);
-        } else {
-            holder.imagenImageView.setImageResource(R.drawable.diet);
-            holder.alertaTextView.setVisibility(View.GONE);
+            imagenMostrar = "android.resource://" + holder.itemView.getContext().getPackageName() + "/" + R.drawable.outofstock;   //Gestionar las imágenes locales
         }
 
-        // Agregar un listener para abrir EditActivity al hacer clic en el producto
-        holder.itemView.setOnClickListener(v -> {
-            // Crear el Intent para abrir EditActivity
-            Intent intent = new Intent(holder.itemView.getContext(), EditActivity.class);
+        if (imagenMostrar != null && !imagenMostrar.isEmpty()) {
+            Log.d("GlideDebug", "Cargando imagen: " + imagenMostrar);
+            Glide.with(holder.itemView.getContext())
+                    .load(Uri.parse(imagenMostrar))
+                    .placeholder(R.drawable.diet)
+                    .error(R.drawable.diet)
+                    .into(holder.imagenImageView);
+        } else {
+            Log.d("GlideDebug", "URL imagen es null o vacía");
+            Glide.with(holder.itemView.getContext())
+                    .load(R.drawable.diet)
+                    .into(holder.imagenImageView);
+        }
 
-            // Pasar los detalles del producto a la siguiente actividad
+        // Listener para editar
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(holder.itemView.getContext(), EditActivity.class);
             intent.putExtra("PRODUCTO_ID", producto.getId());
             intent.putExtra("PRODUCTO_NOMBRE", producto.getNombre());
             intent.putExtra("PRODUCTO_CANTIDAD", producto.getCantidad());
             intent.putExtra("PRODUCTO_MINIMO", producto.getMinimo());
             intent.putExtra("PRODUCTO_IMAGEN_URL", producto.getImagen());
-
-            // Iniciar la actividad
             holder.itemView.getContext().startActivity(intent);
         });
 
-        // Botón para sumar cantidad
+        // Botones sumar/restar
         holder.btnSumar.setOnClickListener(v -> {
             int nuevaCantidad = producto.getCantidad() + 1;
             producto.setCantidad(nuevaCantidad);
             holder.cantidadTextView.setText("Cantidad: " + nuevaCantidad);
             actualizarCantidad(producto.getId(), nuevaCantidad, holder);
-            // Mostrar mensaje si el stock está bajo
+
             if (nuevaCantidad <= producto.getMinimo()) {
                 Toast.makeText(holder.itemView.getContext(), "⚠ ¡Atención! El stock de " + producto.getNombre() + " está bajo.", Toast.LENGTH_SHORT).show();
             }
-
         });
 
-        // Botón para restar cantidad
         holder.btnRestar.setOnClickListener(v -> {
             if (producto.getCantidad() > 0) {
                 int nuevaCantidad = producto.getCantidad() - 1;
@@ -97,13 +101,13 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
                 holder.cantidadTextView.setText("Cantidad: " + nuevaCantidad);
                 actualizarCantidad(producto.getId(), nuevaCantidad, holder);
 
-                // Mostrar mensaje si el stock está bajo
                 if (nuevaCantidad <= producto.getMinimo()) {
                     Toast.makeText(holder.itemView.getContext(), "⚠ ¡Atención! El stock de " + producto.getNombre() + " está bajo.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
+
 
     @Override
     public int getItemCount() {

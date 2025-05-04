@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/edit"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#69F0AE">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFF59D"
+            android:padding="16dp"
+            android:layout_margin="32dp">
+
+            <!-- Imagen del albarán -->
+            <ImageView
+                android:id="@+id/image_albaran"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:background="@android:color/darker_gray"
+                android:contentDescription="Foto albarán"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btn_seleccionar_foto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Seleccionar foto"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <CheckBox
+                android:id="@+id/check_pagado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pagado"
+                app:layout_constraintTop_toBottomOf="@id/btn_seleccionar_foto"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp" />
+
+            <EditText
+                android:id="@+id/et_cif"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="CIF"
+                app:layout_constraintTop_toBottomOf="@id/image_albaran"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp" />
+
+            <EditText
+                android:id="@+id/et_nombre"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Nombre proveedor"
+                app:layout_constraintTop_toBottomOf="@id/et_cif"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                android:id="@+id/et_importe"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Importe"
+                android:inputType="numberDecimal"
+                app:layout_constraintTop_toBottomOf="@id/et_nombre"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                    android:id="@+id/et_fecha_pago"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Fecha de pago (yyyy-MM-dd)"
+                    app:layout_constraintTop_toBottomOf="@id/et_importe"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp" />
+
+
+            <Button
+                android:id="@+id/btn_cancelar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cancelar"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:textColor="@android:color/white"
+                app:layout_constraintTop_toBottomOf="@id/et_fecha_pago"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="24dp" />
+
+            <Button
+                android:id="@+id/btn_guardar_albaran"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Guardar albarán"
+                android:backgroundTint="@android:color/holo_green_dark"
+                android:textColor="@android:color/white"
+                app:layout_constraintTop_toBottomOf="@id/btn_cancelar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
