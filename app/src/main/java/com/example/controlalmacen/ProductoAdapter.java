@@ -79,6 +79,7 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
             intent.putExtra("PRODUCTO_CANTIDAD", producto.getCantidad());
             intent.putExtra("PRODUCTO_MINIMO", producto.getMinimo());
             intent.putExtra("PRODUCTO_IMAGEN_URL", producto.getImagen());
+            intent.putExtra("PRODUCTO_HABILITADO", producto.getHabilitado());
             holder.itemView.getContext().startActivity(intent);
         });
 

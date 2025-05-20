@@ -20,16 +20,24 @@ public class User {
     @SerializedName("habilitado")
     private Boolean habilitado;
 
+    @SerializedName("isAdmin")
+    private Boolean isAdmin;
+
+    @SerializedName("email")
+    private String email;
+
 
     public User() {}
 
 
-    public User(Long id, String nombre, String foto, String password, Boolean habilitado) {
+    public User(Long id, String nombre, String foto, String password, Boolean habilitado, Boolean isAdmin, String email) {
         this.id = id;
         this.nombre = nombre;
         this.foto = foto;
         this.password = password;
         this.habilitado = habilitado;
+        this.isAdmin = isAdmin;
+        this.email = email;
     }
 
 
@@ -47,4 +55,11 @@ public class User {
 
     public Boolean getHabilitado() { return habilitado; }
     public void setHabilitado(Boolean habilitado) { this.habilitado = habilitado; }
+
+    public Boolean getIsAdmin() { return isAdmin; }
+    public void setIsAdmin(Boolean isAdmin) { this.isAdmin = isAdmin; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
 }

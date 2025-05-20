@@ -1,11 +1,13 @@
 package com.example.controlalmacen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -87,6 +89,12 @@ public class ProductActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        Button btnAgregarNuevoProducto = findViewById(R.id.btnAgregarProducto);
+        btnAgregarNuevoProducto.setOnClickListener(v -> {
+            Intent intent = new Intent(ProductActivity.this, AgregarProductoActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     @Override
@@ -146,6 +154,37 @@ public class ProductActivity extends AppCompatActivity {
         });
     }
 
+
+
+
+    /*private void fetchProductosFrecuentes(Long userId) {
+    InteraccionInterface interaccionInterface = ApiClient.getClient().create(InteraccionInterface.class);
+
+    Call<List<Interaccion>> call = interaccionInterface.getUltimasInteracciones(userId);
+    call.enqueue(new Callback<List<Interaccion>>() {
+        @Override
+        public void onResponse(Call<List<Interaccion>> call, Response<List<Interaccion>> response) {
+            if (response.isSuccessful() && response.body() != null) {
+                List<Producto> productosUsados = new ArrayList<>();
+                for (Interaccion i : response.body()) {
+                    productosUsados.add(i.getProducto());
+                }
+
+                // Supongamos que tienes un RecyclerView con un adapter
+                adapter.actualizarLista(productosUsados); // Aquí actualizas tu vista
+            } else {
+                Log.e("API", "Error en la respuesta: " + response.code());
+            }
+        }
+
+        @Override
+        public void onFailure(Call<List<Interaccion>> call, Throwable t) {
+            Log.e("API", "Error de conexión: " + t.getMessage());
+        }
+    });
+}
+*/
+
     private void filtrarProductos(String texto) {
         List<Producto> productosFiltrados = new ArrayList<>();
         for (Producto p : productos) {
@@ -161,4 +200,7 @@ public class ProductActivity extends AppCompatActivity {
         super.onResume();
         fetchProductos(); // Refresca los productos al volver
     }
+
+
+
 }

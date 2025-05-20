@@ -11,6 +11,7 @@ import android.widget.*;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -56,6 +57,7 @@ public class EditActivity extends AppCompatActivity {
         int cantidad = getIntent().getIntExtra("PRODUCTO_CANTIDAD", 0);
         int cantidadMinima = getIntent().getIntExtra("PRODUCTO_MINIMO", 0);
         String imagenUrl = getIntent().getStringExtra("PRODUCTO_IMAGEN_URL");
+        boolean habilitado = getIntent().getBooleanExtra("PRODUCTO_HABILITADO", true);
 
 
         etNombre = findViewById(R.id.et_nombre);
@@ -93,9 +95,11 @@ public class EditActivity extends AppCompatActivity {
                     .into(imageViewProducto);
         }
 
+        checkBoxHabilitado.setChecked(habilitado);
 
 
-        btnEliminar.setOnClickListener(v -> eliminarProducto());
+
+        btnEliminar.setOnClickListener(v -> confirmarEliminar());
 
         btnActualizar.setOnClickListener(v -> actualizarProducto(productoId));
 
@@ -140,13 +144,23 @@ public class EditActivity extends AppCompatActivity {
             Toast.makeText(this, "Habilitado: " + checkBoxHabilitado.isChecked(), Toast.LENGTH_SHORT).show();
             return true;
         } else if (id == R.id.menu_delete_product) {
-            btnEliminar.performClick();
+            confirmarEliminar();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+
+    // Confirmar eliminación del producto
+    private void confirmarEliminar() {
+        new AlertDialog.Builder(this)
+                .setTitle("Eliminar producto")
+                .setMessage("¿Estás seguro de que quieres eliminar este producto?")
+                .setPositiveButton("Sí", (dialog, which) -> eliminarProducto())
+                .setNegativeButton("No", null)
+                .show();
+    }
 
 
     // Método para eliminar producto
@@ -182,7 +196,7 @@ public class EditActivity extends AppCompatActivity {
         String nombre = etNombre.getText().toString().trim();
         int cantidad = Integer.parseInt(etCantidad.getText().toString().trim());
         int cantidadMinima = Integer.parseInt(etCantidadMinima.getText().toString().trim());
-        //boolean habilitado = checkBoxHabilitado.isChecked();
+        boolean habilitado = checkBoxHabilitado.isChecked();
 
         Producto productoActualizado = new Producto();
         productoActualizado.setId(productoId);
@@ -190,7 +204,7 @@ public class EditActivity extends AppCompatActivity {
         productoActualizado.setCantidad(cantidad);
         productoActualizado.setMinimo(cantidadMinima);
         productoActualizado.setImagen(imageUri);
-        //productoActualizado.setHabilitado(habilitado);
+        productoActualizado.setHabilitado(habilitado);
 
         productosInterface.updateProducto(productoId, productoActualizado).enqueue(new Callback<Producto>() {
             @Override
@@ -199,7 +213,12 @@ public class EditActivity extends AppCompatActivity {
                     Toast.makeText(EditActivity.this, "Producto actualizado correctamente", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    Toast.makeText(EditActivity.this, "Error al actualizar producto", Toast.LENGTH_SHORT).show();
+                    try {
+                        String error = response.errorBody().string();
+                        Toast.makeText(EditActivity.this, "Error: " + error, Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(EditActivity.this, "Error al actualizar producto", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:background="#81D4FA">
+
+    <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFF9C4"
+                android:padding="16dp"
+                android:layout_margin="32dp">
+
+            <!-- Imagen del usuario -->
+            <ImageView
+                    android:id="@+id/image_usuario_edit"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:background="@android:color/darker_gray"
+                    android:contentDescription="Foto usuario"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            <!-- Botón seleccionar foto -->
+            <Button
+                    android:id="@+id/btn_seleccionar_foto_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Seleccionar foto"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Nombre -->
+            <EditText
+                    android:id="@+id/et_nombre_usuario_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Nombre usuario"
+                    app:layout_constraintTop_toBottomOf="@id/image_usuario_edit"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="16dp" />
+
+            <!-- Check admin -->
+            <CheckBox
+                    android:id="@+id/check_admin_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Administrador"
+                    app:layout_constraintTop_toBottomOf="@id/et_nombre_usuario_edit"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="16dp" />
+
+            <!-- Email (solo si es admin) -->
+            <EditText
+                    android:id="@+id/et_email_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/check_admin_edit"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp" />
+
+            <!-- Password (solo si es admin) -->
+            <EditText
+                    android:id="@+id/et_password_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Contraseña"
+                    android:inputType="textPassword"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/et_email_edit"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp" />
+
+            <!-- Botón Guardar Cambios -->
+            <Button
+                    android:id="@+id/btn_guardar_cambios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Guardar Cambios"
+                    android:backgroundTint="@android:color/holo_green_dark"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintTop_toBottomOf="@id/et_password_edit"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="24dp" />
+
+            <!-- Botón Eliminar -->
+            <Button
+                    android:id="@+id/btn_eliminar_usuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Eliminar Usuario"
+                    android:textColor="@android:color/holo_red_dark"
+                    app:layout_constraintTop_toBottomOf="@id/btn_guardar_cambios"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp" />
+
+            <!-- Botón Cancelar -->
+            <Button
+                    android:id="@+id/btn_cancelar_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cancelar"
+                    android:backgroundTint="@android:color/holo_red_light"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintTop_toBottomOf="@id/btn_eliminar_usuario"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
