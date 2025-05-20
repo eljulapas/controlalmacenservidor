@@ -15,16 +15,19 @@ public class Producto {
     private Integer cantidad;
     private Integer minimo;
 
+    private Boolean habilitado = true;
+
 
     public Producto() {}
 
 
-    public Producto(Long id, String nombre, String imagen, Integer cantidad, Integer minimo) {
+    public Producto(Long id, String nombre, String imagen, Integer cantidad, Integer minimo, Boolean habilitado) {
         this.id = id;
         this.nombre = nombre;
         this.imagen = imagen;
         this.cantidad = cantidad;
         this.minimo = minimo;
+        this.habilitado = habilitado;
     }
 
 
@@ -42,4 +45,12 @@ public class Producto {
 
     public Integer getMinimo() { return minimo; }
     public void setMinimo(Integer minimo) { this.minimo = minimo; }
+
+    public Boolean getHabilitado() {
+        return habilitado;
+    }
+
+    public void setHabilitado(Boolean habilitado) {
+        this.habilitado = habilitado;
+    }
 }

@@ -1,10 +1,6 @@
 package com.example.demo.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")  // Usamos "Users" porque esa es la tabla en la base de datos
@@ -18,6 +14,11 @@ public class User {
     private String foto;
     private String password;
     private Boolean habilitado = true;
+
+    @Column(name = "is_admin")
+    private Boolean isAdmin = false;
+    private String email;
+
 
     // Getters y setters
     public Long getId() {
@@ -59,4 +60,21 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public Boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
 }

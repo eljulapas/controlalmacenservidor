@@ -2,10 +2,7 @@ package com.example.demo.endpoints;
 
 import com.example.demo.entities.User;
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.Path;
+import retrofit2.http.*;
 
 import java.util.List;
 
@@ -22,4 +19,16 @@ public interface UsuariosInterface {
     // Endpoint para crear un nuevo usuario
     @POST("/api/users/")
     Call<User> createUser(@Body User user);
+
+
+    @PUT("/api/users/{id}")  // Actualizar un Usuario por ID
+    Call<User> actualizarUsuario(@Path("id") Long id, @Body User user);
+
+    @DELETE("/api/users/{id}")  // Eliminar un Usuario por ID
+    Call<Void> eliminarUsuario(@Path("id") Long id);
+
+    @POST("/login")
+    @FormUrlEncoded
+    Call<User> login(@Field("email") String email, @Field("password") String password);
+
 }

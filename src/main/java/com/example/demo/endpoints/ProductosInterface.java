@@ -2,6 +2,7 @@ package com.example.demo.endpoints;
 
 
 import com.example.demo.entities.Producto;
+import org.springframework.web.bind.annotation.GetMapping;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -24,5 +25,9 @@ public interface ProductosInterface {
     // Endpoint para crear un nuevo producto
     @POST("/api/productos/")
     Call<Producto> createProducto(@Body Producto producto);
+
+
+
+
 
 }
