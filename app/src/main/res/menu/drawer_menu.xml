@@ -7,18 +7,8 @@
                 android:icon="@drawable/add" />
 
         <item
-                android:id="@+id/nav_editar_perfil"
-                android:title="Editar Perfil"
-                android:icon="@drawable/diet" />
-
-        <item
-                android:id="@+id/nav_nuevo_albaran"
-                android:title="Nuevo Albarán"
-                android:icon="@drawable/add" />
-
-        <item
                 android:id="@+id/nav_generar_informes"
-                android:title="Generar Informes"
+                android:title="Albaranes"
                 android:icon="@drawable/diet" />
 
         <item
@@ -29,11 +19,6 @@
         <item
                 android:id="@+id/nav_inventario"
                 android:title="Inventario"
-                android:icon="@drawable/diet" />
-
-        <item
-                android:id="@+id/nav_cerrar_sesion"
-                android:title="Cerrar sesión de admin"
                 android:icon="@drawable/diet" />
 
     </group>

@@ -33,6 +33,7 @@
                     android:resource="@xml/file_paths"/>
         </provider>
 
+
         <activity
                 android:name=".MainActivity"
                 android:exported="true">
@@ -115,7 +116,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity
                 android:name=".EditarUsuarioActivity"
                 android:exported="true">
@@ -125,9 +125,17 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity
                 android:name=".PerfilesActivity"
+                android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".InventarioActivity"
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

@@ -19,7 +19,7 @@ public class Producto {
     @SerializedName("minimo")
     private Integer minimo;
 
-    @SerializedName("habilitado") // ✅ CAMBIO AÑADIDO
+    @SerializedName("habilitado")
     private Boolean habilitado;
 
 

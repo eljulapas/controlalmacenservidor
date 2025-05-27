@@ -12,6 +12,18 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
+
+
+    <Button
+            android:id="@+id/btn_atras"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="← Atrás"
+            android:backgroundTint="@android:color/holo_blue_dark"
+            android:textColor="@android:color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="16dp" />
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewAlbaranes"
             android:layout_width="match_parent"

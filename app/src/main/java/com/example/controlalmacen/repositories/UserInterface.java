@@ -19,7 +19,8 @@ public interface UserInterface {
     @DELETE("users/{id}")  // Eliminar un Usuario por ID
     Call<Void> eliminarUsuario(@Path("id") Long id);
 
-    @POST("/api/users/login")  // ⬅ CORRIGE ESTO
+    //Este era para el método anterior a la hora de seleccionar un usuario para mostrar el menú de administrador
+    @POST("/api/users/login")
     @FormUrlEncoded
     Call<User> login(@Field("email") String email, @Field("password") String password);
 

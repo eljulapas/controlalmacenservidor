@@ -19,20 +19,20 @@ import java.util.List;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserAdapterViewHolder> {
 
     private List<User> users;
-    private boolean modoEditar = false; // ✅ Nueva variable para modo edición
+    private boolean modoEditar = false;
 
     public UserAdapter(List<User> users) {
         this.users = users;
     }
 
-    // ✅ Setter para cambiar el modo desde MainActivity
+
     public void setModoEditar(boolean modoEditar) {
         this.modoEditar = modoEditar;
     }
 
     @Override
     public UserAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // Inflar el layout para cada item de usuario
+
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_usuario, parent, false);
         return new UserAdapterViewHolder(view);
     }
@@ -51,15 +51,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserAdapterVie
         } else {
 
         }
-
-        // Mostrar el estado habilitado del usuario
-        /*if (user.getHabilitado()) {
-            holder.habilitadoTextView.setText("Habilitado");
-            holder.habilitadoTextView.setTextColor(Color.GREEN);
-        } else {
-            holder.habilitadoTextView.setText("Deshabilitado");
-            holder.habilitadoTextView.setTextColor(Color.RED);
-        }*/
 
         // Al clickar la foto del usuario
         holder.fotoImageView.setOnClickListener(v -> {
@@ -80,15 +71,22 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserAdapterVie
             } else {
                 // Modo normal: Ir a ProductActivity
                 Intent intent = new Intent(holder.itemView.getContext(), ProductActivity.class);
+
+                // PASAMOS LOS DATOS DEL USUARIO SELECCIONADO
+                intent.putExtra("usuarioNombre", user.getNombre());
+                intent.putExtra("usuarioEmail", user.getEmail());
+                intent.putExtra("usuarioIsAdmin", user.getIsAdmin());
+                intent.putExtra("usuarioId", user.getId());
+
                 holder.itemView.getContext().startActivity(intent);
             }
         });
 
-        // ✅ Al clickar el icono de editar (siempre va a editar, no depende de modoEditar)
+        // Al clickar el icono de editar (siempre va a editar)
         holder.editImageView.setOnClickListener(v -> {
             Intent intent = new Intent(holder.itemView.getContext(), EditarUsuarioActivity.class);
 
-            // ✅ Pasamos los datos individualmente (sin error)
+            // Pasamos los datos individualmente
             intent.putExtra("usuarioId", user.getId());
             intent.putExtra("usuarioNombre", user.getNombre());
             intent.putExtra("usuarioEmail", user.getEmail());
@@ -126,7 +124,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserAdapterVie
 
         public UserAdapterViewHolder(View itemView) {
             super(itemView);
-            // Enlazar las vistas
             nombreTextView = itemView.findViewById(R.id.user_nombre);
             fotoImageView = itemView.findViewById(R.id.user_foto);
             editImageView = itemView.findViewById(R.id.user_edit);

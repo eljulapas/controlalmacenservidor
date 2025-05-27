@@ -47,11 +47,11 @@ public class EditarUsuarioActivity extends AppCompatActivity {
                 usuarioNombre,
                 usuarioFoto,
                 usuarioPassword,
-                true, // habilitado por defecto (puedes cambiar según necesidad)
+                true, // habilitado por defecto
                 usuarioIsAdmin,
                 usuarioEmail
         );
-        // Enlazar vistas
+
         imageUsuario = findViewById(R.id.image_usuario_edit);
         btnSeleccionarFoto = findViewById(R.id.btn_seleccionar_foto_edit);
         etNombreUsuario = findViewById(R.id.et_nombre_usuario_edit);
@@ -201,7 +201,7 @@ public class EditarUsuarioActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(EditarUsuarioActivity.this, "Usuario eliminado.", Toast.LENGTH_SHORT).show();
-                    setResult(RESULT_OK); // ✅ NUEVO
+                    setResult(RESULT_OK);
                     finish();
                 } else {
                     Toast.makeText(EditarUsuarioActivity.this, "Error al eliminar.", Toast.LENGTH_SHORT).show();

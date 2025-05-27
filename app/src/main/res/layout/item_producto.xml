@@ -1,101 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                   android:layout_width="match_parent"
-                                                   android:layout_height="wrap_content"
-                                                   android:padding="16dp">
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="2dp">
 
+    <!-- Imagen del producto -->
     <ImageView
             android:id="@+id/producto_imagen"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:scaleType="centerCrop"
             android:src="@drawable/diet"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_vertical" />
 
+    <!-- Guideline más cerca para achicar la imagen -->
+    <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="90dp" />
+
+    <!-- Nombre -->
     <TextView
             android:id="@+id/producto_nombre"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Nombre Producto"
-            android:textSize="18sp"
+            android:text="Producto"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/guideline_vertical"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/producto_imagen"
-            android:layout_marginStart="8dp"/>
+            app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Cantidad -->
     <TextView
             android:id="@+id/producto_cantidad"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Cantidad: 0"
-            android:textSize="14sp"
+            android:textSize="13sp"
             app:layout_constraintTop_toBottomOf="@id/producto_nombre"
-            app:layout_constraintStart_toEndOf="@id/producto_imagen"
-            android:layout_marginStart="8dp"/>
+            app:layout_constraintStart_toStartOf="@id/producto_nombre"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="2dp" />
 
+    <!-- Mínimo -->
     <TextView
             android:id="@+id/producto_minimo"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Mínimo: 0"
-            android:textSize="14sp"
+            android:textSize="13sp"
             app:layout_constraintTop_toBottomOf="@id/producto_cantidad"
-            app:layout_constraintStart_toEndOf="@id/producto_imagen"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"/>
+            app:layout_constraintStart_toStartOf="@id/producto_nombre"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="2dp" />
 
+    <!-- Alerta -->
     <TextView
             android:id="@+id/producto_alerta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="¡Stock bajo!"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:textColor="@android:color/holo_red_dark"
             android:visibility="gone"
-    app:layout_constraintTop_toBottomOf="@id/producto_minimo"
-    app:layout_constraintStart_toStartOf="@id/producto_minimo"
-    android:layout_marginTop="8dp"/>
-
+            app:layout_constraintTop_toBottomOf="@id/producto_minimo"
+            app:layout_constraintStart_toStartOf="@id/producto_nombre"
+            android:layout_marginTop="2dp" />
 
     <!-- Botón Restar -->
     <Button
             android:id="@+id/btnRestar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:text="-"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:textColor="@android:color/white"
             android:backgroundTint="@android:color/holo_red_light"
-            app:layout_constraintTop_toBottomOf="@id/producto_minimo"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="8dp" />
+            app:layout_constraintTop_toBottomOf="@id/producto_alerta"
+            app:layout_constraintStart_toStartOf="@id/producto_nombre"
+            android:layout_marginTop="4dp" />
 
-    <!-- Texto de Cantidad -->
+    <!-- Cantidad numérica -->
     <TextView
             android:id="@+id/textCantidad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/producto_minimo"
+            android:textSize="15sp"
+            app:layout_constraintTop_toTopOf="@id/btnRestar"
             app:layout_constraintStart_toEndOf="@id/btnRestar"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="16dp" />
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp" />
 
-    <!-- Botón Sumar (+) en verde -->
+    <!-- Botón Sumar -->
     <Button
             android:id="@+id/btnSumar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:text="+"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:textColor="@android:color/white"
             android:backgroundTint="@android:color/holo_green_light"
-            app:layout_constraintTop_toBottomOf="@id/producto_minimo"
-            app:layout_constraintStart_toEndOf="@id/textCantidad"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp" />
+            app:layout_constraintTop_toTopOf="@id/btnRestar"
+            app:layout_constraintStart_toEndOf="@id/textCantidad" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

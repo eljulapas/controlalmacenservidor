@@ -115,6 +115,7 @@ public class AgregarAlbaranActivity extends AppCompatActivity {
             public void onResponse(Call<Albaran> call, Response<Albaran> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(AgregarAlbaranActivity.this, "Albarán guardado con éxito.", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
                     finish();
                 } else {
                     Toast.makeText(AgregarAlbaranActivity.this, "Error al guardar albarán.", Toast.LENGTH_SHORT).show();

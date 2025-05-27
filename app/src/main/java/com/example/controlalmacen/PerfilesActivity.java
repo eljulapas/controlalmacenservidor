@@ -1,8 +1,10 @@
 package com.example.controlalmacen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -44,6 +46,14 @@ public class PerfilesActivity extends AppCompatActivity {
 
         userInterface = UserInstance.getRetrofitInstance().create(UserInterface.class);
         cargarUsuarios();
+
+        // Botón atrás
+        Button btnAtras = findViewById(R.id.btn_atras);
+        btnAtras.setOnClickListener(v -> {
+            Intent intent = new Intent(PerfilesActivity.this, ProductActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
         editTextBuscarUsuario.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -101,4 +111,12 @@ public class PerfilesActivity extends AppCompatActivity {
         }
         userAdapter.actualizarLista(filtrados);
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cargarUsuarios(); //  Recargaa los usuarios cuando se vuelve a la actividad
+    }
+
 }

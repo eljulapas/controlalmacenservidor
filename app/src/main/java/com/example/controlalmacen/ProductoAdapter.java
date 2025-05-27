@@ -47,7 +47,6 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
 
         holder.alertaTextView.setVisibility(View.GONE);
 
-        // Decide qué imagen mostrar
         String imagenMostrar = producto.getImagen();  // Por defecto, usa la URL
 
         if (producto.getCantidad() <= producto.getMinimo()) {

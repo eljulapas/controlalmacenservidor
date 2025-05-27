@@ -28,6 +28,12 @@ android {
     }
 }
 
+// 👇 Esto evita que se incluya log4j por error
+configurations.all {
+    exclude(group = "org.apache.logging.log4j", module = "log4j-api")
+    exclude(group = "org.apache.logging.log4j", module = "log4j-core")
+}
+
 dependencies {
 
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -52,4 +58,12 @@ dependencies {
 
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
     implementation("com.google.android.material:material:1.10.0")
+
+    // Apache POI para manejar archivos Excel
+
+    implementation("net.sourceforge.jexcelapi:jxl:2.6.12")
+
+    implementation("androidx.work:work-runtime:2.9.0")
+
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }

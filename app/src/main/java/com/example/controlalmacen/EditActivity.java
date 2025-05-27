@@ -27,7 +27,7 @@ import retrofit2.Response;
 
 public class EditActivity extends AppCompatActivity {
 
-    // Declarar las variables
+
     private EditText etNombre, etCantidad, etCantidadMinima;
     private ImageView imageViewProducto;
     private CheckBox checkBoxHabilitado;
@@ -37,7 +37,7 @@ public class EditActivity extends AppCompatActivity {
 
     private long productoId;
 
-    private Button btnActualizar;
+    private Button btnActualizar, btnCancelar;
 
 
     // para guardar la imagen seleccionada
@@ -68,7 +68,7 @@ public class EditActivity extends AppCompatActivity {
         btnEliminar = findViewById(R.id.btn_eliminar);
         btnActualizar = findViewById(R.id.btn_actualizar);
         btnEditarFoto = findViewById(R.id.btn_editar_foto);
-
+        btnCancelar = findViewById(R.id.btn_cancelar_edit);
 
 
 
@@ -105,6 +105,7 @@ public class EditActivity extends AppCompatActivity {
 
         //Botón para seleccionar foto
         btnEditarFoto.setOnClickListener(v -> abrirSelectorDeImagen());
+        btnCancelar.setOnClickListener(v -> finish());
 
     }
 
@@ -123,32 +124,6 @@ public class EditActivity extends AppCompatActivity {
             imageViewProducto.setImageURI(selectedImage);
             imageUri = selectedImage.toString(); // Actualiza imageUri para guardar luego
         }
-    }
-
-    // Menú superior
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_drawable, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.menu_edit_product) {
-            Toast.makeText(this, "Editar producto", Toast.LENGTH_SHORT).show();
-            return true;
-        } else if (id == R.id.menu_disable_product) {
-            checkBoxHabilitado.setChecked(!checkBoxHabilitado.isChecked());
-            Toast.makeText(this, "Habilitado: " + checkBoxHabilitado.isChecked(), Toast.LENGTH_SHORT).show();
-            return true;
-        } else if (id == R.id.menu_delete_product) {
-            confirmarEliminar();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
 

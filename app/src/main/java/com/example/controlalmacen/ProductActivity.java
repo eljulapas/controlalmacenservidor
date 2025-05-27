@@ -1,7 +1,10 @@
 package com.example.controlalmacen;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -34,66 +37,108 @@ public class ProductActivity extends AppCompatActivity {
     private ProductosInterface productosInterface;
     private RecyclerView recyclerView;
     private ProductoAdapter adapter;
-    private List<Producto> productos = new ArrayList<>(); // Inicializar para evitar NullPointerException
+    private List<Producto> productos = new ArrayList<>();
 
 
     private EditText searchProduct;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
+        Intent intent = getIntent();
+        String usuarioNombre = intent.getStringExtra("usuarioNombre");
+        boolean isAdmin = intent.getBooleanExtra("usuarioIsAdmin", false);
+
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigation_view);
+        recyclerView = findViewById(R.id.recyclerViewProductos);
+        searchProduct = findViewById(R.id.search_product);
+        Button btnAgregarNuevoProducto = findViewById(R.id.btnAgregarProducto);
+
+        // Mostrar u ocultar menú lateral
+
+        if (isAdmin) {
+            navigationView.setVisibility(View.VISIBLE);
+
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawerLayout.addDrawerListener(toggle);
+            toggle.syncState();
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            navigationView.setNavigationItemSelectedListener(item -> {
+                int id = item.getItemId();
+                Intent navIntent = null;
+
+                if (id == R.id.nav_nuevo_perfil) {
+                    navIntent = new Intent(this, AgregarUsuarioActivity.class);
+                } else if (id == R.id.nav_generar_informes) {
+                    navIntent = new Intent(this, InformeAlbaranesActivity.class);
+                } else if (id == R.id.nav_perfil) {
+                    navIntent = new Intent(this, PerfilesActivity.class);
+                } else if (id == R.id.nav_inventario) {
+                    navIntent = new Intent(this, InventarioActivity.class);
+                }
+
+                if (navIntent != null) startActivity(navIntent);
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            });
+        } else {
+            navigationView.setVisibility(View.GONE); // Ocultar para no-admins
+        }
+
+
         // Configurar Retrofit
         productosInterface = ProductoInstance.getRetrofitInstance().create(ProductosInterface.class);
 
         // Configurar RecyclerView
         recyclerView = findViewById(R.id.recyclerViewProductos);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Inicializar EditText de búsqueda
-        searchProduct = findViewById(R.id.search_product);
-        searchProduct.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        //que el comportamiento sea más dinámico (horizontal en tablets o landscape, vertical en móviles o portrait
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        } else {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filtrarProductos(s.toString());
-            }
 
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
 
         // Configurar DrawerLayout y NavigationView
         drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.navigation_view);
-        toolbar = findViewById(R.id.toolbar);
-
-        // Configurar la Toolbar
-        setSupportActionBar(toolbar);
-
-        // Configurar el item seleccionado del menú lateral
-        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
 
         // Cargar productos al abrir la actividad
         fetchProductos();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawerLayout,  R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        Button btnAgregarNuevoProducto = findViewById(R.id.btnAgregarProducto);
-        btnAgregarNuevoProducto.setOnClickListener(v -> {
-            Intent intent = new Intent(ProductActivity.this, AgregarProductoActivity.class);
-            startActivity(intent);
+         btnAgregarNuevoProducto.setOnClickListener(v -> {
+            Intent agregarProductoIntent  = new Intent(ProductActivity.this, AgregarProductoActivity.class);
+            startActivity(agregarProductoIntent );
         });
+
+        Button btnAtras = findViewById(R.id.btn_atras);
+        btnAtras.setOnClickListener(v -> {
+            Intent VolverAtrasIntent = new Intent(ProductActivity.this, MainActivity.class);
+            startActivity(VolverAtrasIntent);
+            finish();
+        });
+
 
     }
 
@@ -106,27 +151,7 @@ public class ProductActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-        int id = menuItem.getItemId();
-
-        if (id == R.id.menu_edit_product) {
-            Toast.makeText(this, "Editar producto", Toast.LENGTH_SHORT).show();
-
-        } else if (id == R.id.menu_disable_product) {
-            Toast.makeText(this, "Deshabilitar producto", Toast.LENGTH_SHORT).show();
-
-        } else if (id == R.id.menu_delete_product) {
-            Toast.makeText(this, "Eliminar producto", Toast.LENGTH_SHORT).show();
-
-        } else if (id == R.id.menu_admin_option) {
-            Toast.makeText(this, "Opción solo admin", Toast.LENGTH_SHORT).show();
-
-        }
-
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
     private void fetchProductos() {
         Call<List<Producto>> call = productosInterface.getAllProductos();
 
@@ -140,6 +165,20 @@ public class ProductActivity extends AppCompatActivity {
                     // Adaptador con los datos de los productos
                     adapter = new ProductoAdapter(productos);
                     recyclerView.setAdapter(adapter);
+
+
+                    searchProduct.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            filtrarProductos(s.toString());
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {}
+                    });
                 } else {
                     Log.e("ProductActivity", "Error en la respuesta: " + response.code());
                     Toast.makeText(ProductActivity.this, "No se encontraron productos", Toast.LENGTH_SHORT).show();
@@ -155,7 +194,7 @@ public class ProductActivity extends AppCompatActivity {
     }
 
 
-
+    //Código para futura mejora
 
     /*private void fetchProductosFrecuentes(Long userId) {
     InteraccionInterface interaccionInterface = ApiClient.getClient().create(InteraccionInterface.class);
@@ -170,8 +209,8 @@ public class ProductActivity extends AppCompatActivity {
                     productosUsados.add(i.getProducto());
                 }
 
-                // Supongamos que tienes un RecyclerView con un adapter
-                adapter.actualizarLista(productosUsados); // Aquí actualizas tu vista
+
+                adapter.actualizarLista(productosUsados);
             } else {
                 Log.e("API", "Error en la respuesta: " + response.code());
             }
@@ -186,6 +225,10 @@ public class ProductActivity extends AppCompatActivity {
 */
 
     private void filtrarProductos(String texto) {
+        if (adapter == null) {
+            Log.w("ProductActivity", "Adapter aún no inicializado. No se puede filtrar.");
+            return;
+        }
         List<Producto> productosFiltrados = new ArrayList<>();
         for (Producto p : productos) {
             if (p.getNombre().toLowerCase().contains(texto.toLowerCase())) {
@@ -198,7 +241,7 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fetchProductos(); // Refresca los productos al volver
+        fetchProductos(); // Recarga los productos al volver
     }
 
 

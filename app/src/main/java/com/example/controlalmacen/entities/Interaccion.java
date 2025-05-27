@@ -1,5 +1,7 @@
 package com.example.controlalmacen.entities;
 
+
+//Clase para futuras mejoras
 public class Interaccion {
 
     private Long id;

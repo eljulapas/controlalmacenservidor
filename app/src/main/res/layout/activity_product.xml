@@ -8,27 +8,25 @@
         android:layout_height="match_parent"
         tools:context=".ProductActivity">
 
-
-
-    <!-- Contenido principal -->
+    <!-- ✅ CONTENIDO PRINCIPAL -->
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".ProductActivity">
 
-        <!-- Toolbar con icono de menú -->
-        <!-- Aquí va tu Toolbar -->
+        <!-- ✅ TOOLBAR -->
         <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:title="Productos"
-                app:titleTextColor="@android:color/white" tools:ignore="MissingConstraints"/>
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-
-        <!-- Barra de búsqueda -->
+        <!-- 🔍 Búsqueda -->
         <EditText
                 android:id="@+id/search_product"
                 android:layout_width="0dp"
@@ -41,17 +39,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/recyclerViewProductos"/>
 
-        <!-- RecyclerView para mostrar los productos -->
+        <!-- 📋 Lista de productos -->
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewProductos"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@id/search_product"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/btnAgregarProducto"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-
+        <!-- ➕ Botón de agregar -->
         <Button
                 android:id="@+id/btnAgregarProducto"
                 android:layout_width="wrap_content"
@@ -61,13 +60,30 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_margin="16dp" />
 
+        <!-- Botón de Atrás -->
+        <!-- Botón de Atrás -->
+        <Button
+                android:id="@+id/btn_atras"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="← Atrás"
+                android:backgroundTint="@android:color/holo_blue_dark"
+                android:textColor="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_margin="16dp" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Menú lateral -->
+    <!-- ✅ MENU LATERAL (debe ir al final para mostrarse bien) -->
     <com.google.android.material.navigation.NavigationView
             android:id="@+id/navigation_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            app:menu="@menu/menu_drawable"/>
+            android:background="@android:color/white"
+            android:visibility="gone"
+            app:menu="@menu/drawer_menu" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

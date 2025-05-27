@@ -8,6 +8,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
+// Clase para futuras mejoras
 public interface InteraccionInterface {
 
     @GET("/api/interacciones")

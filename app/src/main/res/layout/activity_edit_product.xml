@@ -107,6 +107,20 @@
                     android:layout_marginTop="16dp"/>
 
 
+            <!-- Botón Cancelar -->
+            <Button
+                    android:id="@+id/btn_cancelar_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cancelar"
+                    android:backgroundTint="@android:color/holo_red_light"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintTop_toBottomOf="@id/btn_actualizar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

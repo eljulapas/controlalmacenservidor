@@ -1,5 +1,6 @@
 package com.example.controlalmacen;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -12,10 +13,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
@@ -29,10 +33,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.function.Consumer;
 
 import com.example.controlalmacen.instances.AlbaranInstance;
@@ -51,6 +53,11 @@ public class InformeAlbaranesActivity extends AppCompatActivity {
 
     private AlbaranInterface albaranInterface;
 
+    private List<Albaran> listaAlbaranesOriginal; // Lista original de albaranes
+    private List<Albaran> listaAlbaranesFiltrados; // Lista de albaranes filtrados
+    private ActivityResultLauncher<Intent> agregarAlbaranLauncher;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +67,11 @@ public class InformeAlbaranesActivity extends AppCompatActivity {
         tvResumen = findViewById(R.id.tvResumen);
         Button btnGenerar = findViewById(R.id.btnGenerar);
         Button btnEnviar = findViewById(R.id.btnEnviar);
+        Button btnMesActual = findViewById(R.id.btnMesActual);
+        Button btnSemanaActual = findViewById(R.id.btnSemanaActual);
+        Button btnFechaPersonalizada = findViewById(R.id.btnFechaPersonalizada);
+        Button btnMostrarTodos = findViewById(R.id.btnMostrarTodos);
+        Button btnAgregarAlbaran = findViewById(R.id.btnAgregarAlbaran);
 
         rvAlbaranes.setLayoutManager(new LinearLayoutManager(this));
 
@@ -80,6 +92,33 @@ public class InformeAlbaranesActivity extends AppCompatActivity {
                 Toast.makeText(this, "Primero genera el informe", Toast.LENGTH_SHORT).show();
             }
         });
+
+        agregarAlbaranLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        cargarAlbaranesDesdeAPI(); // 🔁 Recarga la lista con el nuevo albarán
+                    }
+                }
+        );
+
+
+        btnAgregarAlbaran.setOnClickListener(v -> {
+            Intent intent = new Intent(InformeAlbaranesActivity.this, AgregarAlbaranActivity.class);
+            agregarAlbaranLauncher.launch(intent);
+        });
+
+        Button btnAtras = findViewById(R.id.btn_atras);
+        btnAtras.setOnClickListener(v -> {
+            Intent intent = new Intent(InformeAlbaranesActivity.this, ProductActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        btnMesActual.setOnClickListener(v -> filtrarPorMesActual());
+        btnSemanaActual.setOnClickListener(v -> filtrarPorSemanaActual());
+        btnFechaPersonalizada.setOnClickListener(v -> seleccionarRangoFechas());
+        btnMostrarTodos.setOnClickListener(v -> mostrarTodosAlbaranes());
     }
 
     private void cargarAlbaranesDesdeAPI() {
@@ -87,8 +126,9 @@ public class InformeAlbaranesActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Albaran>> call, Response<List<Albaran>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Albaran> albaranes = response.body();
-                    adapter = new AlbaranSeleccionAdapter(albaranes);
+                    listaAlbaranesOriginal = response.body();  // Guardamos los albaranes originales
+                    listaAlbaranesFiltrados = new ArrayList<>(listaAlbaranesOriginal);  // Inicializamos los filtrados con todos
+                    adapter = new AlbaranSeleccionAdapter(listaAlbaranesFiltrados);
                     rvAlbaranes.setAdapter(adapter);
                 } else {
                     Toast.makeText(InformeAlbaranesActivity.this, "Error al cargar albaranes", Toast.LENGTH_SHORT).show();
@@ -101,6 +141,145 @@ public class InformeAlbaranesActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    // Filtrar por mes actual
+    private void filtrarPorMesActual() {
+        Calendar calendar = Calendar.getInstance();
+        int mesActual = calendar.get(Calendar.MONTH); // Obtiene el mes actual
+        List<Albaran> albaranesFiltrados = new ArrayList<>();
+
+        for (Albaran albaran : listaAlbaranesOriginal) {
+            try {
+                // Convertir la fecha de String a Date
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date fechaAlbaran = sdf.parse(albaran.getFecha());
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(fechaAlbaran);
+                int mesAlbaran = cal.get(Calendar.MONTH); // Obtener el mes del albarán
+
+                if (mesAlbaran == mesActual) {
+                    albaranesFiltrados.add(albaran);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        listaAlbaranesFiltrados = albaranesFiltrados;
+        adapter = new AlbaranSeleccionAdapter(listaAlbaranesFiltrados);
+        rvAlbaranes.setAdapter(adapter);
+        adapter.notifyDataSetChanged(); // Actualiza el RecyclerView con los albaranes filtrados
+    }
+
+
+    private void filtrarPorSemanaActual() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setFirstDayOfWeek(Calendar.MONDAY); // Establecer lunes como el primer día de la semana
+        int semanaActual = calendar.get(Calendar.WEEK_OF_YEAR); // Obtiene la semana actual
+        int añoActual = calendar.get(Calendar.YEAR); // Obtiene el año actual
+        List<Albaran> albaranesFiltrados = new ArrayList<>();
+
+        Log.d("SemanaActual", "Semana actual: " + semanaActual + " Año actual: " + añoActual);
+
+        for (Albaran albaran : listaAlbaranesOriginal) {
+            try {
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date fechaAlbaran = sdf.parse(albaran.getFecha());
+
+
+                Log.d("AlbaranFecha", "Fecha albaran: " + albaran.getFecha());
+
+                Calendar cal = Calendar.getInstance();
+                cal.setFirstDayOfWeek(Calendar.MONDAY);
+                cal.setTime(fechaAlbaran);
+                int semanaAlbaran = cal.get(Calendar.WEEK_OF_YEAR);
+                int añoAlbaran = cal.get(Calendar.YEAR);
+
+
+                Log.d("SemanaAlbaran", "Semana del albarán: " + semanaAlbaran + " Año del albarán: " + añoAlbaran);
+
+                // Comparar la semana actual con la semana del albarán (esto era una comprobación porque había problemas)
+                if (semanaAlbaran == semanaActual && añoAlbaran == añoActual) {
+                    Log.d("FiltroSemana", "Albarán filtrado: " + albaran.getFecha());
+                    albaranesFiltrados.add(albaran);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        listaAlbaranesFiltrados = albaranesFiltrados;
+        adapter = new AlbaranSeleccionAdapter(listaAlbaranesFiltrados);
+        rvAlbaranes.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+
+
+    // Selección del rango de fechas personalizado
+    private void seleccionarRangoFechas() {
+        Calendar calendarInicio = Calendar.getInstance();
+        Calendar calendarFin = Calendar.getInstance();
+
+        DatePickerDialog datePickerInicio = new DatePickerDialog(this,
+                (view, year, monthOfYear, dayOfMonth) -> {
+                    calendarInicio.set(year, monthOfYear, dayOfMonth);
+
+                    DatePickerDialog datePickerFin = new DatePickerDialog(this,
+                            (view1, year1, monthOfYear1, dayOfMonth1) -> {
+                                calendarFin.set(year1, monthOfYear1, dayOfMonth1);
+                                filtrarPorRangoFechas(calendarInicio.getTime(), calendarFin.getTime());
+                            },
+                            calendarFin.get(Calendar.YEAR),
+                            calendarFin.get(Calendar.MONTH),
+                            calendarFin.get(Calendar.DAY_OF_MONTH)
+                    );
+
+                    datePickerFin.show();
+                },
+                calendarInicio.get(Calendar.YEAR),
+                calendarInicio.get(Calendar.MONTH),
+                calendarInicio.get(Calendar.DAY_OF_MONTH)
+        );
+
+        datePickerInicio.show();
+    }
+
+       private void filtrarPorRangoFechas(Date fechaInicio, Date fechaFin) {
+        List<Albaran> albaranesFiltrados = new ArrayList<>();
+
+        for (Albaran albaran : listaAlbaranesOriginal) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date fechaAlbaran = sdf.parse(albaran.getFecha());
+
+                if (!fechaAlbaran.before(fechaInicio) && !fechaAlbaran.after(fechaFin)) {
+                    albaranesFiltrados.add(albaran);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        listaAlbaranesFiltrados = albaranesFiltrados;
+        adapter = new AlbaranSeleccionAdapter(listaAlbaranesFiltrados);
+        rvAlbaranes.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+
+    private void mostrarTodosAlbaranes() {
+        listaAlbaranesFiltrados = new ArrayList<>(listaAlbaranesOriginal);
+        adapter = new AlbaranSeleccionAdapter(listaAlbaranesFiltrados); // Crear nuevo adaptador
+        rvAlbaranes.setAdapter(adapter); // Asignar el nuevo adaptador al RecyclerView
+        adapter.notifyDataSetChanged();
+    }
+
+
+
 
     private void mostrarResumenEnPantalla(String resumen) {
         tvResumen.setText(resumen);
@@ -213,14 +392,14 @@ public class InformeAlbaranesActivity extends AppCompatActivity {
 
     // Método para gestionar la respuesta de la solicitud de permisos
     private void verificarPermisosYGenerarInforme() {
-        // Verifica si la versión de Android es al menos 14 (Android 14+)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             // Android 14 o superior
             if (checkSelfPermission(android.Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{android.Manifest.permission.READ_MEDIA_IMAGES}, 1);
                 Toast.makeText(this, "Otorga permisos y vuelve a intentarlo", Toast.LENGTH_SHORT).show();
             } else {
-                // El permiso ya está concedido, genera el informe
+
                 generarInforme(adapter != null ? adapter.getSeleccionados() : new ArrayList<>());
             }
         } else {
@@ -247,21 +426,6 @@ public class InformeAlbaranesActivity extends AppCompatActivity {
                 // Permiso denegado, muestra un mensaje
                 Toast.makeText(this, "Permiso denegado para acceder a las imágenes", Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    // Ya no se usa
-    private void seleccionarImagenes() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            // Para seleccionar imágenes
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setType("image/*");
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); // Si quieres permitir seleccionar varias imágenes
-            startActivityForResult(intent, 100);
-        } else {
-            // Para versiones anteriores a Android 14
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(intent, 100);
         }
     }
 }

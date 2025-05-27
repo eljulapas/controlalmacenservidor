@@ -14,6 +14,48 @@
             android:textStyle="bold"
             android:padding="8dp" />
 
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical|start"
+            android:weightSum="4">
+        <Button
+                android:id="@+id/btnMesActual"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Mes Actual"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"/>
+
+        <Button
+                android:id="@+id/btnSemanaActual"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Semana Actual"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"/>
+
+        <Button
+                android:id="@+id/btnFechaPersonalizada"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Rango de Fechas"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"/>
+
+        <!-- El botón "Mostrar todos" -->
+        <Button
+                android:id="@+id/btnMostrarTodos"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Mostrar todos"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"/>
+    </LinearLayout>
+
+
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvAlbaranes"
             android:layout_width="match_parent"
@@ -33,4 +75,20 @@
             android:layout_height="wrap_content"
             android:text="Enviar por correo"
             android:layout_marginTop="8dp"/>
+
+    <Button
+            android:id="@+id/btnAgregarAlbaran"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Agregar Albarán" />
+
+    <Button
+            android:id="@+id/btn_atras"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="← Atrás"
+            android:backgroundTint="@android:color/holo_blue_dark"
+            android:textColor="@android:color/white"
+            android:layout_gravity="top|end"
+            android:layout_margin="8dp" />
 </LinearLayout>

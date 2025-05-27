@@ -1,7 +1,9 @@
 package com.example.controlalmacen;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import android.widget.Button;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +38,14 @@ public class AlbaranesProveedorActivity extends AppCompatActivity {
 
         albaranInterface = AlbaranInstance.getRetrofitInstance().create(AlbaranInterface.class);
 
+
+
+        Button btnAtras = findViewById(R.id.btn_atras);
+        btnAtras.setOnClickListener(v -> {
+            Intent intent = new Intent(AlbaranesProveedorActivity.this, ProductActivity.class);
+            startActivity(intent);
+            finish();
+        });
         cargarAlbaranes();
     }
 
