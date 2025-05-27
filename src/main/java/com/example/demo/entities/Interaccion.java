@@ -3,6 +3,9 @@ package com.example.demo.entities;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+
+// Esta clase es para futuras mejoras en la aplicación
+
 @Entity
 @Table(name = "interaccion")
 public class Interaccion {

@@ -32,6 +32,7 @@ public class AlbaranController {
         return albaranRepository.findByProveedorId(proveedorId);
     }
 
+    //Crear albaran
     @PostMapping
     public Albaran createAlbaran(@RequestBody Albaran albaran) {
         if (albaran.getProveedor() != null && albaran.getProveedor().getCif() != null) {

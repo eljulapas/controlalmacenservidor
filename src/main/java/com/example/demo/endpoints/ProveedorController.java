@@ -20,6 +20,8 @@ public class ProveedorController {
         return proveedorRepository.findAll();
     }
 
+
+    //Crear proveedor
     @PostMapping
     public Proveedor createProveedor(@RequestBody Proveedor proveedor) {
         return proveedorRepository.save(proveedor);

@@ -15,6 +15,7 @@ public interface AlbaranInterface {
     @GET("/api/albaranes/proveedor/{proveedorId}")
     Call<List<Albaran>> getByProveedor(@Path("proveedorId") Long id);
 
+    //Crear albaran
     @POST("/api/albaranes")
     Call<Albaran> create(@Body Albaran albaran);
 

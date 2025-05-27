@@ -50,7 +50,7 @@ public class UserController {
                     User updatedUser = userRepository.save(existingUser);
                     return ResponseEntity.ok(updatedUser);
                 })
-                .orElse(ResponseEntity.status(404).build()); // NO devuelvas ResponseEntity<String>
+                .orElse(ResponseEntity.status(404).build());
     }
 
 
@@ -60,11 +60,10 @@ public class UserController {
     // Eliminar un usuario
     @DeleteMapping("/{id}")
     public void eliminarUsuario(@PathVariable Long id) {
-        System.out.println("Eliminando usuario con ID: " + id);
         userRepository.deleteById(id);
     }
 
-    // ⚠ AÑADE ESTO EN UserController
+    // Hacer login para menú lateral
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestParam String email, @RequestParam String password) {
         User user = userRepository.findByEmail(email);
